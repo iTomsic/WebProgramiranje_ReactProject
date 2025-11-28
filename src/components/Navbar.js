@@ -11,18 +11,24 @@ export default function Navbar() {
             alignItems: "center"
         }}>
 
-            <Link to="/products" style={{ color: "white", textDecoration: "none" }}><h2>Book Webshop</h2></Link>
+            <Link to="/products" style={{ color: "white", textDecoration: "none" }}><h1>Book Webshop</h1></Link>
 
             <div style={{ display: "flex", gap: "30px" }}>
 
                 <Link to="/products" style={{ color: "white", textDecoration: "none" }}>
-                    Products
+                    <h2>Products</h2>
                 </Link>
+
+                <Link to="/about" style={{ color: "white", textDecoration: "none" }}>
+                    <h2>About</h2>
+                </Link>
+
 
                 <Link to="/cart" style={{ color: "white", textDecoration: "none" }}>
-                    Cart
+                    <h2>Cart</h2>
                 </Link>
 
+                
 
             </div>
 

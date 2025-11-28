@@ -6,7 +6,7 @@ export default function ProductList() {
     return (
 
         <div>
-            <h3>Products</h3>
+            <h2>Products</h2>
 
             <ul style={{ listStyle: "none", padding: 0 }}>
                 {products.map((p) => (
