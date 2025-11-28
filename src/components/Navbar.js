@@ -1,6 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
+
+    const navigate = useNavigate();
+
+    // Check if a user is logged in (token stored)
+    const isLoggedIn = !!localStorage.getItem("token");
+
+    function handleLogout() {
+        localStorage.removeItem("token");
+        navigate("/login");
+    }
+
+
     return (
         <nav style={{
             background: "brown",
@@ -28,8 +40,34 @@ export default function Navbar() {
                     <h2>Cart</h2>
                 </Link>
 
-                
+                {!isLoggedIn && (
+                    <>
+                        <Link to="/register" style={{ color: "white", textDecoration: "none" }}>
+                            <h2>Register</h2>
+                        </Link>
 
+                        <Link to="/login" style={{ color: "white", textDecoration: "none" }}>
+                            <h2>Login</h2>
+                        </Link>
+                    </>
+                )}
+
+                {isLoggedIn && (
+                    <button
+                        onClick={handleLogout}
+                        style={{
+                            background: "transparent",
+                            border: "1px solid white",
+                            color: "white",
+                            padding: "5px 15px",
+                            fontSize: "18px",
+                            cursor: "pointer",
+                            borderRadius: "5px"
+                        }}
+                    >
+                        Logout
+                    </button>
+                )}
             </div>
 
 

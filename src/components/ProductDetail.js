@@ -21,7 +21,7 @@ function ProductDetail() {
 
             <div style={styles.infoSection}>
                 <h1>{product.name}</h1>
-                <p style={styles.price}>${product.price}</p>
+                <p style={styles.price}>€{product.price}</p>
 
                 <p style={styles.description}>{product.description}</p>
 
