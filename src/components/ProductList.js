@@ -6,13 +6,13 @@ export default function ProductList() {
     return (
 
         <div>
-            <h2 style={{color: "white"}}>Products</h2>
+            <h2 style={{color: "black"}}>Products</h2>
 
             <ul style={{ listStyle: "none", padding: 0 }}>
                 {products.map((p) => (
 
                     <li key={p.id} style={{ marginBottom: "20px" }}>
-                        <Link to={`/products/${p.id}`} style={{ textDecoration: "none", color: "white" }}>
+                        <Link to={`/products/${p.id}`} style={{ textDecoration: "none", color: "black" }}>
 
                             <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
                                 <img src={p.image} alt={p.name} style={{ width: "80px", height: "80px", objectFit: "cover", borderRadius: "6px" }} />

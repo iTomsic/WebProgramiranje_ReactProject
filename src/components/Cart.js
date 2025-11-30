@@ -5,9 +5,6 @@ export default function Cart(){
             <h2>Your Cart</h2>
             <p>No items yet.</p>
         </div>
-
-
-
     );
 
 

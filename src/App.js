@@ -10,11 +10,9 @@ import Login from "./components/Login";
 function App() {
   return (
 
-
     <Router>
       <Navbar />
       <main style={{ padding: "20px" }}>
-
 
         <Routes>
           <Route path="/products" element={<ProductList />} />
@@ -25,11 +23,9 @@ function App() {
           <Route path="/login" element={<Login />} />
 
           <Route path="/products/:id" element={<ProductDetail />} />
-
         </Routes>
-
+        
       </main>
-
     </Router>
   );
 }
