@@ -9,11 +9,9 @@ import Login from "./components/Login";
 
 function App() {
   return (
-
     <Router>
       <Navbar />
       <main style={{ padding: "20px" }}>
-
         <Routes>
           <Route path="/products" element={<ProductList />} />
           <Route path="/cart" element={<Cart />} />
@@ -24,7 +22,6 @@ function App() {
 
           <Route path="/products/:id" element={<ProductDetail />} />
         </Routes>
-        
       </main>
     </Router>
   );
