@@ -9,7 +9,7 @@ export default function ProductList() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const res = await fetch("http://localhost:5000/products");
+        const res = await fetch("http://localhost:5000/api/products");
         if (!res.ok) throw new Error("Failed to fetch products");
 
         const data = await res.json();
@@ -35,7 +35,7 @@ export default function ProductList() {
         {products.map((p) => (
           <li key={p._id} style={{ marginBottom: "20px" }}>
             <Link
-              to={`products/${p._id}`}
+              to={`/products/${p._id}`}
               style={{ textDecoration: "none", color: "black" }}
             >
               <div
