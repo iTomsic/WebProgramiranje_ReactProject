@@ -5,22 +5,41 @@ import products from "../data/products";
 function ProductDetail() {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const foundProduct = products.find((p) => p.id.toString() === id);
-        setProduct(foundProduct);
+        async function fetchProduct() {
+            try {
+                setLoading(true);
+                const response = await fetch(`/api/products/${id}`);
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch product");
+                }
+
+                const data = await response.json();
+                setProduct(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchProduct();
     }, [id]);
 
-    if (!product) {
-        return <div>Loading product...</div>;
-    }
+    if (loading) return <div>Loading product...</div>;
+    if (error) return <div>Error: {error}</div>;
+    if (!product) return <div>Product not found.</div>;
 
     return (
         <div style={styles.container}>
-            <img src={product.image} alt={product.name} style={styles.image} />
+            <img src={product.image} alt={product.title} style={styles.image} />
 
             <div style={styles.infoSection}>
-                <h1>{product.name}</h1>
+                <h1>{product.title}</h1>
                 <p style={styles.price}>€{product.price}</p>
 
                 <p style={styles.description}>{product.description}</p>
@@ -66,5 +85,5 @@ const styles = {
         border: "none",
         borderRadius: "5px",
         cursor: "pointer",
-    }
+    },
 };
