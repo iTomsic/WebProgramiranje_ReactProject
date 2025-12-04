@@ -8,13 +8,13 @@ dotenv.config();
 console.log("DEBUG MONGO_URI:", process.env.MONGO_URI);
 
 const app = express();
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors({ origin: "http://localhost:3000" })); //wrong myb
 app.use(express.json());
 
 connectDB();
 
 app.get("/", (req, res) => {
-  res.json({ message: "Backend running" });
+    res.json({ message: "Backend running" });
 });
 
 app.use("/api/products", ProductRoutes);
