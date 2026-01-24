@@ -1,0 +1,214 @@
+.navbar {
+    background: #4d243d;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1000;
+}
+
+.nav-logo {
+    color: white;
+    text-decoration: none;
+    font-family: "Playfair Display", serif;
+    transition: all 0.3s ease-in-out;
+    z-index: 1001;
+    position: relative;
+    display: inline-block;
+}
+
+.nav-links-container {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-family: "Playfair Display", serif;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+}
+
+@media (min-width: 769px) {
+    .nav-link:hover {
+        transform: scale(1.1);
+    }
+
+    .nav-logo:hover {
+        transform: scale(1.1);
+    }
+
+    .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #d4a762;
+        transform: scaleX(0);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .nav-link:hover::after {
+        transform: scaleX(1);
+    }
+}
+
+.logout-btn {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 5px 15px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: "Playfair Display", serif;
+    transition: all 0.3s ease-in-out;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.hamburger-line {
+    width: 100%;
+    height: 3px;
+    background-color: white;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.hamburger.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+}
+
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links-container {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 70%;
+        max-width: 300px;
+        height: 100vh;
+        background: #4d243d;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 80px;
+        gap: 20px;
+        transition: right 0.3s ease-in-out;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+    .nav-links-container.active {
+        right: 0;
+    }
+
+    .menu-overlay {
+        display: block;
+    }
+
+    .nav-link {
+        padding: 15px 20px;
+        width: 100%;
+        box-sizing: border-box;
+        display: block;
+        transform: none !important;
+    }
+
+    .nav-logo {
+        transform: none !important;
+    }
+
+    .nav-link h2 {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+
+    .nav-link {
+        position: relative;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+    .nav-link:hover {
+        transform: none;
+    }
+
+    .nav-link::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 20px;
+        right: 20px;
+        height: 1px;
+        background-color: rgba(212, 167, 98, 0.1);
+    }
+
+    .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 20px;
+        width: 0;
+        height: 2px;
+        background-color: #d4a762;
+        transition: width 0.3s ease-in-out;
+    }
+
+    .nav-link:hover::after {
+        width: calc(100% - 40px);
+    }
+
+    .logout-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+        align-self: center;
+        width: calc(100% - 40px);
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}

@@ -1,53 +1,51 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import "./Navbar.css";
 
 export default function Navbar() {
     const navigate = useNavigate();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    // Check if a user is logged in (token stored)
     const isLoggedIn = !!localStorage.getItem("token");
 
     function handleLogout() {
         localStorage.removeItem("token");
         navigate("/login");
+        setIsMenuOpen(false);
+    }
+
+    function toggleMenu() {
+        setIsMenuOpen(!isMenuOpen);
+    }
+
+    function closeMenu() {
+        setIsMenuOpen(false);
     }
 
     return (
-        <nav
-            style={{
-                background: "#4D243D",
-                color: "white",
-                padding: "10px 20px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-            }}
-        >
-            <Link
-                to="/products"
-                style={{ color: "white", textDecoration: "none" }}
-            >
+        <nav className="navbar">
+            <Link to="/products" className="nav-logo" onClick={closeMenu}>
                 <h1>Novella</h1>
             </Link>
 
-            <div style={{ display: "flex", gap: "30px" }}>
-                <Link
-                    to="/products"
-                    style={{ color: "white", textDecoration: "none" }}
-                >
+            <button className="hamburger" onClick={toggleMenu}>
+                <span className="hamburger-line"></span>
+                <span className="hamburger-line"></span>
+                <span className="hamburger-line"></span>
+            </button>
+
+            <div
+                className={`nav-links-container ${isMenuOpen ? "active" : ""}`}
+            >
+                <Link to="/products" className="nav-link" onClick={closeMenu}>
                     <h2>Products</h2>
                 </Link>
 
-                <Link
-                    to="/about"
-                    style={{ color: "white", textDecoration: "none" }}
-                >
+                <Link to="/about" className="nav-link" onClick={closeMenu}>
                     <h2>About</h2>
                 </Link>
 
-                <Link
-                    to="/cart"
-                    style={{ color: "white", textDecoration: "none" }}
-                >
+                <Link to="/cart" className="nav-link" onClick={closeMenu}>
                     <h2>Cart</h2>
                 </Link>
 
@@ -55,14 +53,16 @@ export default function Navbar() {
                     <>
                         <Link
                             to="/register"
-                            style={{ color: "white", textDecoration: "none" }}
+                            className="nav-link"
+                            onClick={closeMenu}
                         >
                             <h2>Register</h2>
                         </Link>
 
                         <Link
                             to="/login"
-                            style={{ color: "white", textDecoration: "none" }}
+                            className="nav-link"
+                            onClick={closeMenu}
                         >
                             <h2>Login</h2>
                         </Link>
@@ -70,22 +70,15 @@ export default function Navbar() {
                 )}
 
                 {isLoggedIn && (
-                    <button
-                        onClick={handleLogout}
-                        style={{
-                            background: "transparent",
-                            border: "1px solid white",
-                            color: "white",
-                            padding: "5px 15px",
-                            fontSize: "18px",
-                            cursor: "pointer",
-                            borderRadius: "5px",
-                        }}
-                    >
+                    <button onClick={handleLogout} className="logout-btn">
                         Logout
                     </button>
                 )}
             </div>
+
+            {isMenuOpen && (
+                <div className="menu-overlay" onClick={closeMenu}></div>
+            )}
         </nav>
     );
 }
