@@ -35,6 +35,60 @@
     display: inline-block;
 }
 
+.auth-links-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: 15px;
+}
+
+.user-info {
+    padding: 8px 16px;
+    background: rgba(212, 167, 98, 0.1);
+    border-radius: 20px;
+    border: 1px solid rgba(212, 167, 98, 0.3);
+}
+
+.welcome-text {
+    font-size: 0.9rem;
+    color: #f0e6d6;
+    font-weight: 500;
+    font-family: "Playfair Display", serif;
+}
+
+.username {
+    color: #d4a762;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.nav-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: "Playfair Display", serif;
+}
+
+.logout-button h2 {
+    color: #f0e6d6;
+    transition: all 0.3s ease-in-out;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.register-link h2 {
+    background: linear-gradient(to right, #d4a762, #c19a52);
+    color: #4d243d;
+    padding: 8px 20px;
+    border-radius: 20px;
+    transition: all 0.3s ease-in-out;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: "Playfair Display", serif;
+}
+
 @media (min-width: 769px) {
     .nav-link:hover {
         transform: scale(1.1);
@@ -58,6 +112,26 @@
 
     .nav-link:hover::after {
         transform: scaleX(1);
+    }
+
+    .logout-button:hover h2 {
+        color: #d4a762;
+        transform: scale(1.05);
+    }
+
+    .register-link:hover h2 {
+        background: linear-gradient(to right, #c19a52, #b08c47);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(212, 167, 98, 0.3);
+    }
+
+    .nav-link[href="/login"]:hover h2 {
+        color: #d4a762;
+    }
+
+    .logout-button::after,
+    .register-link::after {
+        display: none;
     }
 }
 
@@ -137,7 +211,7 @@
         flex-direction: column;
         justify-content: flex-start;
         padding-top: 80px;
-        gap: 20px;
+        gap: 15px;
         transition: right 0.3s ease-in-out;
         box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
         z-index: 1000;
@@ -202,6 +276,68 @@
         width: calc(100% - 40px);
     }
 
+    .auth-links-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-left: 0;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(212, 167, 98, 0.2);
+        width: calc(100% - 40px);
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .user-info {
+        text-align: center;
+        margin-bottom: 10px;
+        background: rgba(212, 167, 98, 0.05);
+    }
+
+    .welcome-text {
+        font-size: 0.85rem;
+    }
+
+    .logout-button h2,
+    .register-link h2 {
+        text-align: center;
+        padding: 12px;
+        border-radius: 10px;
+        width: 100%;
+        display: block;
+    }
+
+    .logout-button h2 {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(212, 167, 98, 0.3);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .logout-button:hover h2 {
+        background: rgba(212, 167, 98, 0.1);
+        color: #d4a762;
+    }
+
+    .register-link h2 {
+        background: linear-gradient(to right, #d4a762, #c19a52);
+        color: #4d243d;
+        font-weight: 600;
+    }
+
+    .register-link:hover h2 {
+        background: linear-gradient(to right, #c19a52, #b08c47);
+        transform: none;
+        box-shadow: 0 4px 8px rgba(212, 167, 98, 0.2);
+    }
+
+    .logout-button::after,
+    .register-link::after,
+    .logout-button h2::after,
+    .register-link h2::after {
+        display: none;
+    }
+
     .logout-btn {
         margin-top: 20px;
         padding: 10px 20px;
@@ -210,5 +346,26 @@
         width: calc(100% - 40px);
         margin-left: 20px;
         margin-right: 20px;
+    }
+}
+
+@media (min-width: 769px) {
+    .nav-links-container {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .nav-link h2 {
+        transition:
+            color 0.3s ease,
+            transform 0.3s ease;
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .nav-link:hover h2 {
+        color: #d4a762;
+        transform: translateY(-2px);
     }
 }

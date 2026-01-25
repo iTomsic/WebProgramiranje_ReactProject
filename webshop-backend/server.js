@@ -3,12 +3,13 @@ import express from "express";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
 import ProductRoutes from "./routes/ProductRoutes.js";
+import AuthRoutes from "./routes/AuthRoutes.js";
 
 dotenv.config();
 console.log("DEBUG MONGO_URI:", process.env.MONGO_URI);
 
 const app = express();
-app.use(cors({ origin: "http://localhost:3000" })); //wrong myb
+app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
 
 connectDB();
@@ -17,6 +18,7 @@ app.get("/", (req, res) => {
     res.json({ message: "Backend running" });
 });
 
+app.use("/api/auth", AuthRoutes);
 app.use("/api/products", ProductRoutes);
 
 const PORT = process.env.PORT || 5000;
