@@ -1,11 +1,25 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useCart } from "./CartContext";
 import "./Navbar.css";
 
 export default function Navbar() {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [user, setUser] = useState(null);
+
+    // Use try-catch to handle potential errors
+    let cartCount = 0;
+    try {
+        const cartContext = useCart();
+        // Check if getCartCount exists and is a function
+        if (cartContext && typeof cartContext.getCartCount === "function") {
+            cartCount = cartContext.getCartCount();
+        }
+    } catch (error) {
+        console.warn("Error accessing cart:", error);
+        cartCount = 0;
+    }
 
     useEffect(() => {
         const checkUser = () => {
@@ -46,7 +60,6 @@ export default function Navbar() {
         setUser(null);
         navigate("/login");
         setIsMenuOpen(false);
-
         window.dispatchEvent(new Event("storage"));
     }
 
@@ -82,7 +95,7 @@ export default function Navbar() {
                 </Link>
 
                 <Link to="/cart" className="nav-link" onClick={closeMenu}>
-                    <h2>Cart</h2>
+                    <h2>Cart {cartCount > 0 ? `(${cartCount})` : ""}</h2>
                 </Link>
 
                 <div className="auth-links-container">

@@ -28,7 +28,7 @@ export default function ProductList() {
     if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
 
     return (
-        <div>
+        <div style={{ marginLeft: "10px" }}>
             <h2 style={{ color: "black" }}>Products</h2>
 
             <ul style={{ listStyle: "none", padding: 0 }}>
