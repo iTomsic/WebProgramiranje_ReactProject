@@ -22,6 +22,10 @@ function App() {
                     <Navbar />
                     <main>
                         <Routes>
+                            <Route
+                                path="/"
+                                element={<Navigate to="/products" replace />}
+                            />
                             <Route path="/products" element={<ProductList />} />
                             <Route path="/cart" element={<Cart />} />
                             <Route path="/about" element={<About />} />
@@ -30,6 +34,10 @@ function App() {
                             <Route
                                 path="/products/:id"
                                 element={<ProductDetail />}
+                            />
+                            <Route
+                                path="*"
+                                element={<Navigate to="/products" replace />}
                             />
                         </Routes>
                     </main>
