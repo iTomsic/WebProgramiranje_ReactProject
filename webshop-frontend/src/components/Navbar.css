@@ -89,6 +89,33 @@
     font-family: "Playfair Display", serif;
 }
 
+.cart-link {
+    position: relative;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -14px;
+    background: radial-gradient(
+        circle at top left,
+        #e3c27a,
+        #d4a762 60%,
+        #b08c47
+    );
+    color: #4d243d;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Playfair Display", serif;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
 @media (min-width: 769px) {
     .nav-link:hover {
         transform: scale(1.1);
@@ -138,7 +165,6 @@
 .logout-btn {
     background: transparent;
     border: 1px solid white;
-    color: white;
     padding: 5px 15px;
     font-size: 18px;
     cursor: pointer;
@@ -309,7 +335,7 @@
     }
 
     .logout-button h2 {
-        background: rgba(255, 255, 255, 0.05);
+        /* background: rgb(255, 255, 255); */
         border: 1px solid rgba(212, 167, 98, 0.3);
         transition: all 0.3s ease-in-out;
     }
@@ -339,6 +365,7 @@
     }
 
     .logout-btn {
+        background-color: white;
         margin-top: 20px;
         padding: 10px 20px;
         font-size: 1.2rem;

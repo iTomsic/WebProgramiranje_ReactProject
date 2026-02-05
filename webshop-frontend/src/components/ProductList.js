@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import "./ProductList.css";
 
 export default function ProductList() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [sortOption, setSortOption] = useState("");
 
     useEffect(() => {
         async function fetchProducts() {
@@ -24,52 +26,67 @@ export default function ProductList() {
         fetchProducts();
     }, []);
 
-    if (loading) return <p>Loading products...</p>;
-    if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
+    function handleSortChange(e) {
+        setSortOption(e.target.value);
+    }
+
+    const sortedProducts = [...products].sort((a, b) => {
+        switch (sortOption) {
+            case "price-asc":
+                return a.price - b.price;
+            case "price-desc":
+                return b.price - a.price;
+            case "name-asc":
+                return a.title.localeCompare(b.title);
+            case "name-desc":
+                return b.title.localeCompare(a.title);
+            default:
+                return 0;
+        }
+    });
+
+    if (loading) return <p className="productlist-status">Loading products…</p>;
+
+    if (error) return <p className="productlist-error">Error: {error}</p>;
 
     return (
-        <div style={{ marginLeft: "10px" }}>
-            <h2 style={{ color: "black" }}>Products</h2>
+        <div className="productlist-container">
+            <h2 className="productlist-title">Welcome to Novella!</h2>
 
-            <ul style={{ listStyle: "none", padding: 0 }}>
-                {products.map((p) => (
-                    <li key={p._id} style={{ marginBottom: "20px" }}>
-                        <Link
-                            to={`/products/${p._id}`}
-                            style={{ textDecoration: "none", color: "black" }}
-                        >
-                            <div
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "20px",
-                                }}
-                            >
-                                <img
-                                    src={
-                                        p.image ||
-                                        "https://via.placeholder.com/80"
-                                    }
-                                    alt={p.title}
-                                    style={{
-                                        width: "80px",
-                                        height: "80px",
-                                        objectFit: "cover",
-                                        borderRadius: "6px",
-                                    }}
-                                />
+            <div className="productlist-sort">
+                <label htmlFor="sort">Sort by: </label>
+                <select
+                    id="sort"
+                    value={sortOption}
+                    onChange={handleSortChange}
+                >
+                    <option value="">Default</option>
+                    <option value="price-asc">Price: Low → High</option>
+                    <option value="price-desc">Price: High → Low</option>
+                    <option value="name-asc">Name: A → Z</option>
+                    <option value="name-desc">Name: Z → A</option>
+                </select>
+            </div>
 
-                                <div>
-                                    <h4 style={{ margin: "0" }}>{p.title}</h4>
-                                    <p style={{ margin: "5px 0" }}>
-                                        €{p.price}
-                                    </p>
-                                </div>
-                            </div>
-                        </Link>
-                    </li>
+            <div className="product-grid">
+                {sortedProducts.map((p) => (
+                    <Link
+                        key={p._id}
+                        to={`/products/${p._id}`}
+                        className="product-card"
+                    >
+                        <img
+                            src={p.image || "https://via.placeholder.com/80"}
+                            alt={p.title}
+                            className="product-image"
+                        />
+                        <div className="product-info">
+                            <h4>{p.title}</h4>
+                            <p className="product-price">€{p.price}</p>
+                        </div>
+                    </Link>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 }

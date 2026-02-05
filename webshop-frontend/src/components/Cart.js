@@ -1,16 +1,16 @@
 import { useCart } from "./CartContext";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import "./Cart.css";
 
 export default function Cart() {
-    const {
-        cartItems,
-        removeFromCart,
-        updateQuantity,
-        clearCart,
-        getCartTotal,
-        getCartCount,
-    } = useCart();
+    const { cartItems, removeFromCart, updateQuantity, clearCart } = useCart();
+
+    const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+    const cartTotal = cartItems.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0,
+    );
 
     if (cartItems.length === 0) {
         return (
@@ -26,7 +26,7 @@ export default function Cart() {
 
     return (
         <div className="cart-container">
-            <h1>Your Cart ({getCartCount()} items)</h1>
+            <h1>Your Cart ({cartCount} items)</h1>
 
             <div className="cart-items">
                 {cartItems.map((item) => (
@@ -38,11 +38,13 @@ export default function Cart() {
                             }
                             alt={item.title}
                         />
+
                         <div className="item-details">
                             <h3>{item.title}</h3>
                             <p>by {item.author || "Unknown Author"}</p>
                             <p className="price">€{item.price}</p>
                         </div>
+
                         <div className="quantity-controls">
                             <button
                                 onClick={() =>
@@ -60,6 +62,7 @@ export default function Cart() {
                                 +
                             </button>
                         </div>
+
                         <div className="item-total">
                             <p>€{(item.price * item.quantity).toFixed(2)}</p>
                             <button
@@ -75,16 +78,19 @@ export default function Cart() {
 
             <div className="cart-summary">
                 <h2>Order Summary</h2>
+
                 <div className="summary-row">
                     <span>Subtotal:</span>
-                    <span>€{getCartTotal().toFixed(2)}</span>
+                    <span>€{cartTotal.toFixed(2)}</span>
                 </div>
+
                 <div className="summary-row total">
                     <span>Total:</span>
-                    <span>€{getCartTotal().toFixed(2)}</span>
+                    <span>€{cartTotal.toFixed(2)}</span>
                 </div>
 
                 <button className="checkout-btn">Proceed to Checkout</button>
+
                 <button onClick={clearCart} className="clear-btn">
                     Clear Cart
                 </button>

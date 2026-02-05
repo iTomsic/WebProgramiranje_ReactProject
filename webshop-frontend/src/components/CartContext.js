@@ -1,132 +1,154 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useAuth } from "./AuthContext";
 
-// Create the context
-const CartContext = createContext();
+const CartContext = createContext(null);
 
-// Custom hook to use cart
 export const useCart = () => {
     const context = useContext(CartContext);
-
-    // Debug log
-    console.log("useCart context:", context);
-
     if (!context) {
-        console.error("useCart must be used within a CartProvider");
-        // Return a safe default
-        return {
-            cartItems: [],
-            addToCart: () => console.warn("Cart not available"),
-            removeFromCart: () => console.warn("Cart not available"),
-            updateQuantity: () => console.warn("Cart not available"),
-            clearCart: () => console.warn("Cart not available"),
-            getCartTotal: () => 0,
-            getCartCount: () => 0,
-        };
+        throw new Error("useCart must be used within a CartProvider");
     }
-
     return context;
 };
 
-// Cart provider component
 export const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState(() => {
-        try {
-            const savedCart = localStorage.getItem("novella_cart");
-            return savedCart ? JSON.parse(savedCart) : [];
-        } catch (error) {
-            console.error("Error loading cart:", error);
-            return [];
-        }
-    });
+    const { user } = useAuth();
+    const [cartItems, setCartItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Save to localStorage when cart changes
     useEffect(() => {
-        try {
-            localStorage.setItem("novella_cart", JSON.stringify(cartItems));
-        } catch (error) {
-            console.error("Error saving cart:", error);
+        setIsLoading(true);
+
+        if (!user) {
+            setCartItems([]);
+            setIsLoading(false);
+            return;
         }
-    }, [cartItems]);
 
-    // Add item to cart
+        const timer = setTimeout(() => {
+            const key = `novella_cart_${user._id}`;
+
+            try {
+                const saved = localStorage.getItem(key);
+                const parsed = saved ? JSON.parse(saved) : [];
+                setCartItems(Array.isArray(parsed) ? parsed : []);
+            } catch (err) {
+                console.warn("Failed to load cart from localStorage:", err);
+                setCartItems([]);
+            } finally {
+                setIsLoading(false);
+            }
+        }, 50);
+
+        return () => clearTimeout(timer);
+    }, [user]);
+
+    useEffect(() => {
+        if (!user || isLoading) return;
+
+        const key = `novella_cart_${user._id}`;
+
+        try {
+            localStorage.setItem(key, JSON.stringify(cartItems));
+        } catch (error) {
+            console.error("Failed to save cart to localStorage:", error);
+        }
+    }, [cartItems, user, isLoading]);
+
+    // Optional: Add cleanup on logout
+    useEffect(() => {
+        if (!user) {
+            setCartItems([]);
+        }
+    }, [user]);
+
+    const requireAuth = () => {
+        if (!user) {
+            throw new Error("You must be logged in to use the cart");
+        }
+        if (isLoading) {
+            throw new Error("Cart is still loading, please wait");
+        }
+    };
+
     const addToCart = (product, quantity = 1) => {
-        console.log("Adding to cart:", product);
-        setCartItems((prevItems) => {
-            const existingItem = prevItems.find(
-                (item) => item._id === product._id,
-            );
+        requireAuth();
+        if (!product?._id || quantity <= 0) return;
 
-            if (existingItem) {
-                return prevItems.map((item) =>
+        setCartItems((prev) => {
+            const existing = prev.find((item) => item._id === product._id);
+
+            if (existing) {
+                return prev.map((item) =>
                     item._id === product._id
                         ? { ...item, quantity: item.quantity + quantity }
                         : item,
                 );
-            } else {
-                return [...prevItems, { ...product, quantity }];
             }
+
+            return [
+                ...prev,
+                {
+                    _id: product._id,
+                    title: product.title,
+                    author: product.author,
+                    price: Number(product.price),
+                    image: product.image,
+                    quantity,
+                },
+            ];
         });
     };
 
-    // Remove item from cart
     const removeFromCart = (productId) => {
-        setCartItems((prevItems) =>
-            prevItems.filter((item) => item._id !== productId),
-        );
+        requireAuth();
+        setCartItems((prev) => prev.filter((item) => item._id !== productId));
     };
 
-    // Update item quantity
     const updateQuantity = (productId, quantity) => {
+        requireAuth();
+
         if (quantity <= 0) {
             removeFromCart(productId);
             return;
         }
 
-        setCartItems((prevItems) =>
-            prevItems.map((item) =>
+        setCartItems((prev) =>
+            prev.map((item) =>
                 item._id === productId ? { ...item, quantity } : item,
             ),
         );
     };
 
-    // Clear all items from cart
     const clearCart = () => {
+        requireAuth();
         setCartItems([]);
     };
 
-    // Calculate total price
-    const getCartTotal = () => {
-        return cartItems.reduce((total, item) => {
-            const price = parseFloat(item.price) || 0;
-            const quantity = parseInt(item.quantity) || 0;
-            return total + price * quantity;
-        }, 0);
-    };
+    // ---- Derived data (memoized) ----
+    const cartCount = useMemo(() => {
+        return cartItems.reduce((count, item) => count + item.quantity, 0);
+    }, [cartItems]);
 
-    // Calculate total items count
-    const getCartCount = () => {
-        return cartItems.reduce((count, item) => {
-            return count + (parseInt(item.quantity) || 0);
-        }, 0);
-    };
+    const cartTotal = useMemo(() => {
+        return cartItems.reduce(
+            (total, item) => total + item.price * item.quantity,
+            0,
+        );
+    }, [cartItems]);
 
-    // Context value
     const value = {
         cartItems,
+        cartCount,
+        cartTotal,
         addToCart,
         removeFromCart,
         updateQuantity,
         clearCart,
-        getCartTotal,
-        getCartCount, // Make sure this is included!
+        isLoading, // Export loading state if needed
     };
-
-    console.log("CartProvider value:", value); // Debug log
 
     return (
         <CartContext.Provider value={value}>{children}</CartContext.Provider>
     );
 };
-
-// Export default as well for backward compatibility
-export default CartContext;

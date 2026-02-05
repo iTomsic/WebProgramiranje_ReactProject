@@ -1,14 +1,19 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCart } from "./CartContext";
+import { useAuth } from "./AuthContext";
 import "./ProductDetail.css";
 
 function ProductDetail() {
     const { id } = useParams();
+    const navigate = useNavigate();
+
+    const { user } = useAuth();
+    const { addToCart } = useCart();
+
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { addToCart } = useCart();
 
     const [showNotification, setShowNotification] = useState(false);
     const [notificationMessage, setNotificationMessage] = useState("");
@@ -37,6 +42,19 @@ function ProductDetail() {
         fetchProduct();
     }, [id]);
 
+    const handleAddToCart = () => {
+        if (!user) {
+            navigate("/login");
+            return;
+        }
+
+        addToCart(product, 1);
+
+        setNotificationMessage(`Added ${product.title} to cart!`);
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 3000);
+    };
+
     if (loading) return <div>Loading product...</div>;
     if (error) return <div>Error: {error}</div>;
     if (!product) return <div>Product not found.</div>;
@@ -45,7 +63,7 @@ function ProductDetail() {
         <div className="product-detail-container">
             <img
                 src={product.image || "https://via.placeholder.com/500"}
-                alt={product.title}
+                alt={`Cover of ${product.title}`}
                 className="product-detail-image"
             />
 
@@ -60,19 +78,8 @@ function ProductDetail() {
                     {product.description}
                 </p>
 
-                <button
-                    className="add-to-cart-btn"
-                    onClick={() => {
-                        addToCart(product);
-                        setNotificationMessage(
-                            `Added ${product.title} to cart!`,
-                        );
-                        setShowNotification(true);
-
-                        setTimeout(() => setShowNotification(false), 3000);
-                    }}
-                >
-                    Add to Cart
+                <button className="add-to-cart-btn" onClick={handleAddToCart}>
+                    {user ? "Add to Cart" : "Login to add to cart"}
                 </button>
             </div>
 

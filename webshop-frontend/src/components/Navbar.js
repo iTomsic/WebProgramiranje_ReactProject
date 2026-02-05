@@ -1,75 +1,29 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useCart } from "./CartContext";
+import { useAuth } from "./AuthContext";
 import "./Navbar.css";
 
 export default function Navbar() {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [user, setUser] = useState(null);
 
-    // Use try-catch to handle potential errors
-    let cartCount = 0;
-    try {
-        const cartContext = useCart();
-        // Check if getCartCount exists and is a function
-        if (cartContext && typeof cartContext.getCartCount === "function") {
-            cartCount = cartContext.getCartCount();
-        }
-    } catch (error) {
-        console.warn("Error accessing cart:", error);
-        cartCount = 0;
-    }
+    const { cartCount } = useCart();
+    const { user, logout } = useAuth();
 
-    useEffect(() => {
-        const checkUser = () => {
-            const userData = localStorage.getItem("user");
-            if (userData) {
-                try {
-                    setUser(JSON.parse(userData));
-                } catch (error) {
-                    console.error("Error parsing user data:", error);
-                    setUser(null);
-                }
-            } else {
-                setUser(null);
-            }
-        };
+    const toggleMenu = () => {
+        setIsMenuOpen((prev) => !prev);
+    };
 
-        checkUser();
+    const closeMenu = () => {
+        setIsMenuOpen(false);
+    };
 
-        const handleStorageChange = (e) => {
-            if (e.key === "user") {
-                checkUser();
-            }
-        };
-
-        window.addEventListener("storage", handleStorageChange);
-
-        const interval = setInterval(checkUser, 1000);
-
-        return () => {
-            window.removeEventListener("storage", handleStorageChange);
-            clearInterval(interval);
-        };
-    }, []);
-
-    function handleLogout() {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        setUser(null);
+    const handleLogout = () => {
+        logout();
         navigate("/login");
-        setIsMenuOpen(false);
-        window.dispatchEvent(new Event("storage"));
-    }
-
-    function toggleMenu() {
-        setIsMenuOpen(!isMenuOpen);
-    }
-
-    function closeMenu() {
-        setIsMenuOpen(false);
-    }
+        closeMenu();
+    };
 
     return (
         <nav className="navbar">
@@ -77,44 +31,52 @@ export default function Navbar() {
                 <h1>Novella</h1>
             </Link>
 
-            <button className="hamburger" onClick={toggleMenu}>
-                <span className="hamburger-line"></span>
-                <span className="hamburger-line"></span>
-                <span className="hamburger-line"></span>
+            <button
+                className="hamburger"
+                onClick={toggleMenu}
+                aria-label="Toggle navigation menu"
+                aria-expanded={isMenuOpen}
+            >
+                <span className="hamburger-line" />
+                <span className="hamburger-line" />
+                <span className="hamburger-line" />
             </button>
 
             <div
                 className={`nav-links-container ${isMenuOpen ? "active" : ""}`}
             >
                 <Link to="/products" className="nav-link" onClick={closeMenu}>
-                    <h2>Products</h2>
+                    Products
                 </Link>
 
                 <Link to="/about" className="nav-link" onClick={closeMenu}>
-                    <h2>About</h2>
+                    About
                 </Link>
 
-                <Link to="/cart" className="nav-link" onClick={closeMenu}>
-                    <h2>Cart {cartCount > 0 ? `(${cartCount})` : ""}</h2>
+                <Link
+                    to="/cart"
+                    className="nav-link cart-link"
+                    onClick={closeMenu}
+                >
+                    Cart{" "}
+                    {cartCount > 0 && (
+                        <span className="cart-badge">{cartCount}</span>
+                    )}
                 </Link>
 
                 <div className="auth-links-container">
                     {user ? (
                         <>
-                            <div className="user-info">
-                                <span className="welcome-text">
-                                    Welcome,{" "}
-                                    <span className="username">
-                                        {user.username}
-                                    </span>
+                            <span className="welcome-text">
+                                Welcome,{" "}
+                                <span className="username">
+                                    {user.username ?? "User"}
                                 </span>
-                            </div>
+                            </span>
+
                             <button
                                 className="nav-button logout-button"
-                                onClick={() => {
-                                    handleLogout();
-                                    closeMenu();
-                                }}
+                                onClick={handleLogout}
                             >
                                 <h2>Logout</h2>
                             </button>
@@ -126,23 +88,21 @@ export default function Navbar() {
                                 className="nav-link"
                                 onClick={closeMenu}
                             >
-                                <h2>Login</h2>
+                                Login
                             </Link>
                             <Link
                                 to="/register"
-                                className="nav-link register-link"
+                                className="nav-link"
                                 onClick={closeMenu}
                             >
-                                <h2>Register</h2>
+                                Register
                             </Link>
                         </>
                     )}
                 </div>
             </div>
 
-            {isMenuOpen && (
-                <div className="menu-overlay" onClick={closeMenu}></div>
-            )}
+            {isMenuOpen && <div className="menu-overlay" onClick={closeMenu} />}
         </nav>
     );
 }

@@ -1,11 +1,10 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js"; // Note the .js extension
+import User from "../models/User.js";
 
 const router = express.Router();
 
-// Register Route
 router.post("/register", async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -52,7 +51,6 @@ router.post("/register", async (req, res) => {
     }
 });
 
-// Login Route
 router.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
