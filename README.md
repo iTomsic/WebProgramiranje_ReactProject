@@ -6,12 +6,12 @@ Studentski projekt izrade web aplikacije, poprima primjer webshopa za zamišljen
 
 ## Dokumentacija:
 
-W3Schools Online Web Tutorials https://www.w3schools.com
-for HTML, CSS, JavaScript, React examples
-MongoDB documentation: https://www.mongodb.com/docs/
-React documentation: https://react.dev/reference/react
+W3Schools Online Web Tutorials https://www.w3schools.com <br>
+for HTML, CSS, JavaScript, React examples <br>
+MongoDB documentation: https://www.mongodb.com/docs/ <br>
+React documentation: https://react.dev/reference/react <br>
 
-Ai koristen za generalnu pomoć: https://gemini.google.com/
+Ai koristen za generalnu pomoć: https://gemini.google.com/ <br>
 
 # Getting Started with Create React App
 
