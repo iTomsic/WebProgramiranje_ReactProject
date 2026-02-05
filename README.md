@@ -1,3 +1,18 @@
+# Novella Bookshop
+
+## Opis:
+
+Studentski projekt izrade web aplikacije, poprima primjer webshopa za zamišljeni bookstore, imena Novella.
+
+## Dokumentacija:
+
+W3Schools Online Web Tutorials https://www.w3schools.com
+for HTML, CSS, JavaScript, React examples
+MongoDB documentation: https://www.mongodb.com/docs/
+React documentation: https://react.dev/reference/react
+
+Ai koristen za generalnu pomoć: https://gemini.google.com/
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
